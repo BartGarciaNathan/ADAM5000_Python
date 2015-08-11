@@ -3,33 +3,6 @@
 #  Driver for the ADAM-5000
 #  Made by Bart Garcia  on 23/07/2015
 
-# Imports
-# import time
-# import sys
-# import serial
-#
-# #Open the Serial port
-# sys.stderr = sys.stdout
-# ser = serial.Serial(
-# 	port='/dev/ttyS0',
-# 	baudrate=9600
-# )
-# # ser.open()
-# ser.isOpen()
-#
-# while 1:
-# 	ser.write('$00M\r\n')
-# 	# time.sleep(1)
-# 	# print ser.readline()
-# 	out = ''
-# 	# out += ser.read(1)
-# 	while ser.inWaiting() > 0:
-# 		out += ser.read(1)
-# 	if out != '':
-# 		print ">>" + out
-# 	else :
-# 		print 'Nothing'
-# 	time.sleep(1)
 import sys, os, serial, threading, getopt , time
 import termios, sys, os , fcntl
 import datetime
@@ -92,7 +65,6 @@ def write_command(command):
     t = float(time.time())
     while t+0.1 > float(time.time()):
         wait="Keepwaiting"
-    # print "$"+func.ADM_ADD+command+"\r\n"
 def read_command():
 	out = ''
 	while ser.inWaiting() > 0:
@@ -109,10 +81,9 @@ def read_command_clean():
             aux = ' -'
         else :
             aux = aux
-        # print aux
         out += aux
         aux = ''
-    # print out
+
     return out
 def ai_configure(slot,input_range, data_format):
     ser.write("$"+func.ADM_ADD+"S"+slot+func.AI_CONF+input_range+data_format+"\r\n")
@@ -132,10 +103,6 @@ def get_ai_data(slot):
     while t+0.1 > float(time.time()):
         wait="Keepwaiting"
     raw = read_command_clean()
-    # print raw
-    # print len(raw)
-    # aux = raw[6:12]
-    # print float(aux)
     l =len(raw)
     return raw[1:l-1]
 
@@ -149,8 +116,6 @@ def find_system():
         exit()
     address = aux[1:3]
     module = aux[3:7]
-    # print aux
-    # print len(aux)
     print "Found ADAM-"+module+" with address "+ address
     return 0
 
@@ -222,34 +187,3 @@ output.close()
 ser.close()
 sys.exit(0)
 
-# fd = sys.stdin.fileno()
-# old = termios.tcgetattr(fd)
-# new = termios.tcgetattr(fd)
-# new[3] = new[3] & ~termios.ICANON & ~termios.ECHO
-# new[6][termios.VMIN] = 1
-# new[6][termios.VTIME] = 0
-# termios.tcsetattr(fd, termios.TCSANOW, new)
-# s = ''    # We'll save the characters typed and add them to the pool.
-
-
-#
-# r = threading.Thread(target=reader)
-# r.setDaemon(1)
-# r.start()
-#
-#
-# while 1 :
-# 	x=ser.write("$00M\r\n")
-# 	out = ''
-# 	while ser.inWaiting() > 0:
-# 			out += ser.read(1)
-# 	if out != '':
-# 			print ">>" + out
-# 	time.sleep(1)
-# 	x=ser.write("$002\r\n")
-# 	out = ''
-# 	while ser.inWaiting() > 0:
-# 			out += ser.read(1)
-# 	if out != '':
-# 			print ">>" + out
-# 	time.sleep(1)
